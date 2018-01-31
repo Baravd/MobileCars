@@ -1,5 +1,6 @@
 package com.bvd.android.carstobert.customer.my_cars;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -14,6 +15,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MyCarsActivity extends AppCompatActivity {
 
@@ -35,5 +37,18 @@ public class MyCarsActivity extends AppCompatActivity {
         carArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, myCars);
         purchasedListView.setAdapter(carArrayAdapter);
 
+    }
+
+    @OnClick(R.id.returnCarBtn)
+    public void redirectTOReturnActivity() {
+        Intent intent = new Intent(this, ReturnCarActivity.class);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.deleteAll)
+    public void removeMyCars() {
+        for(Car c: dao.getAll()) {
+            dao.delete(c);
+        }
     }
 }

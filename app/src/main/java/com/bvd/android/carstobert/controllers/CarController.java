@@ -20,4 +20,7 @@ public interface CarController {
 
     @POST("buyCar")
     Call<Car> buyCar(@Body CarBuyDto carBuyDto);
+
+    @GET("all")
+    Call<List<Car>> getAllForEmployee();
 }

@@ -5,7 +5,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-
     <application
         android:name=".app.App"
         android:allowBackup="true"
@@ -24,7 +23,8 @@
         <activity android:name=".customer.CustomerAllCarsActivity" />
         <activity android:name=".employee.EmployeeActivity" />
         <activity android:name=".customer.CustomerCarDetailActivity" />
-        <activity android:name=".customer.my_cars.MyCarsActivity"></activity>
+        <activity android:name=".customer.my_cars.MyCarsActivity" />
+        <activity android:name=".customer.my_cars.ReturnCarActivity"></activity>
     </application>
 
 </manifest>
