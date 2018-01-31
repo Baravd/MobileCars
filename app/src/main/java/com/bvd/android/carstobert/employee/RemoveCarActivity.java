@@ -1,17 +1,18 @@
 package com.bvd.android.carstobert.employee;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
 import android.util.Log;
-import android.widget.ListView;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.bvd.android.carstobert.R;
 import com.bvd.android.carstobert.controllers.CarController;
 import com.bvd.android.carstobert.customer.CustomerAllCarsActivity;
 import com.bvd.android.carstobert.model.Car;
+import com.bvd.android.carstobert.model.dtos.CarIdDto;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -25,29 +26,26 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class EmployeeActivity extends AppCompatActivity {
-
-
-    private static final String TAG = EmployeeActivity.class.getName();
-    @BindView(R.id.employeeCarList)
-    ListView carsListView;
-    private List<Car> cars;
-    private CarEmployeeAdapter adapter;
+public class RemoveCarActivity extends AppCompatActivity {
+    private static final String TAG = RemoveCarActivity.class.getName();
+    @BindView(R.id.idToRemoveTxt)
+    public EditText idCar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_employee);
+        setContentView(R.layout.activity_remove_car);
         ButterKnife.bind(this);
-        cars = new ArrayList<>();
-        //cars.add(new Car(1, "n1", "t1", "st1", 2));
-        retrieveAllCars();
 
-        adapter = new CarEmployeeAdapter(this, R.layout.list_item_2_layout, cars);
-        carsListView.setAdapter(adapter);
+
     }
 
-    private void retrieveAllCars() {
+    @OnClick(R.id.removeRemoveBtn)
+    public void removeCar() {
+        callBackend();
+    }
+
+    private void callBackend() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
@@ -63,41 +61,30 @@ public class EmployeeActivity extends AppCompatActivity {
 
 
         CarController carController = retrofit.create(CarController.class);
-        Call<List<Car>> getCarsCall = carController.getAllForEmployee();
+        String id = idCar.getText().toString();
+        Call<Car> getCarsCall = carController.removeCar(new CarIdDto(Integer.parseInt(id)));
         Log.v(TAG, "Calling api for getting all my cars");
-        getCarsCall.enqueue(new Callback<List<Car>>() {
+        getCarsCall.enqueue(new Callback<Car>() {
             @Override
-            public void onResponse(Call<List<Car>> call, Response<List<Car>> response) {
-                Log.v(TAG, "getting the cars...");
-                cars = response.body();
-                Log.v(TAG, "Items from api=" + cars);
-                //carArrayAdapter.removeAll();
-                adapter.clear();
-                adapter.addAll(cars);
-                adapter.notifyDataSetChanged();
+            public void onResponse(Call<Car> call, Response<Car> response) {
+                Log.v(TAG, "removing car...");
 
+                if (response.code() == 200) {
 
-                Log.v(TAG, response.body().toString());
+                    Toast.makeText(RemoveCarActivity.this, "Succesful delete", Toast.LENGTH_SHORT).show();
+                }
+                Log.v(TAG, "not removed");
+                finish();
+
             }
 
             @Override
-            public void onFailure(Call<List<Car>> call, Throwable t) {
+            public void onFailure(Call<Car> call, Throwable t) {
                 Log.v(TAG, "Failed call");
                 //launchRetryQuestion();
 
             }
         });
-    }
 
-    @OnClick(R.id.addCarBtn)
-    public void returnBtn() {
-        Intent intent = new Intent(this, AddCarActivity.class);
-        startActivity(intent);
-    }
-
-    @OnClick(R.id.deleteCarBtn)
-    public void removeCarBtn() {
-        Intent intent = new Intent(this, RemoveCarActivity.class);
-        startActivity(intent);
     }
 }

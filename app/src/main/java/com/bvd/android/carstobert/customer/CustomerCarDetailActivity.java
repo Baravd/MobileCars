@@ -22,6 +22,7 @@ import com.bvd.android.carstobert.model.dtos.CarBuyDto;
 import org.w3c.dom.Text;
 
 import java.io.IOException;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -133,7 +134,7 @@ public class CustomerCarDetailActivity extends AppCompatActivity {
     }
 
     private void saveToDB(Car car) {
-        Car car1 = new Car(car.getId(), car.getName(), car.getType(), car.getStatus(), carBuyDto.getQuantity());
+        Car car1 = new Car(car.getId(), car.getName(), car.getType(), car.getStatus(), carBuyDto.getQuantity(),new Date());
         dao.insertAll(car1);
     }
 

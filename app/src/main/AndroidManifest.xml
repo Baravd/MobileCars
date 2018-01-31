@@ -24,7 +24,9 @@
         <activity android:name=".employee.EmployeeActivity" />
         <activity android:name=".customer.CustomerCarDetailActivity" />
         <activity android:name=".customer.my_cars.MyCarsActivity" />
-        <activity android:name=".customer.my_cars.ReturnCarActivity"></activity>
+        <activity android:name=".customer.my_cars.ReturnCarActivity" />
+        <activity android:name=".employee.AddCarActivity" />
+        <activity android:name=".employee.RemoveCarActivity"></activity>
     </application>
 
 </manifest>
