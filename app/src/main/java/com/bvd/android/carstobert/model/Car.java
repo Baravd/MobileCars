@@ -1,6 +1,7 @@
 package com.bvd.android.carstobert.model;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.IntRange;
 
@@ -12,9 +13,9 @@ import java.io.Serializable;
  * Created by bara on 1/28/2018.
  */
 
-//@Entity
+@Entity(tableName = "cars")
 public class Car implements Serializable {
-    //@PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = true)
     @Expose
     private Integer id;
     @Expose
@@ -76,6 +77,7 @@ public class Car implements Serializable {
         this.status = status;
     }
 
+    @Ignore
     public Car(String name, String type, Integer quantity, String status) {
 
         this.name = name;
@@ -91,5 +93,8 @@ public class Car implements Serializable {
                 ", type='" + type + '\'' +
                 ", quantity=" + quantity +
                 '}';
+    }
+    public String toString1(){
+        return type+" - "+quantity;
     }
 }
