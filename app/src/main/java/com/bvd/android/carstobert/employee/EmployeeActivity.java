@@ -18,6 +18,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.WebSocket;
+import okhttp3.WebSocketListener;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -46,6 +49,7 @@ public class EmployeeActivity extends AppCompatActivity {
         adapter = new CarEmployeeAdapter(this, R.layout.list_item_2_layout, cars);
         carsListView.setAdapter(adapter);
     }
+
 
     private void retrieveAllCars() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
@@ -100,4 +104,8 @@ public class EmployeeActivity extends AppCompatActivity {
         Intent intent = new Intent(this, RemoveCarActivity.class);
         startActivity(intent);
     }
+
+
+
+
 }

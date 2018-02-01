@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.bvd.android.carstobert.R;
 import com.bvd.android.carstobert.controllers.CarController;
@@ -32,6 +33,9 @@ public class CustomerAllCarsActivity extends AppCompatActivity {
 
     @BindView(R.id.customerCarList)
     public ListView carListView;
+    @BindView(R.id.customerProgressBar)
+    public ProgressBar progressBar;
+
     private List<Car> cars;
     private Retrofit retrofit;
     public static final String API_BASE_URL = "http://10.0.2.2:4000/";
@@ -45,6 +49,7 @@ public class CustomerAllCarsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_customer);
         ButterKnife.bind(this);
         cars = new ArrayList<>();
+
 
        /* Car car = new Car("P100D", "Tesla", 1, "sold");
         cars.add(car);*/
@@ -95,6 +100,12 @@ public class CustomerAllCarsActivity extends AppCompatActivity {
                 carArrayAdapter.clear();
                 carArrayAdapter.addAll(cars);
                 carArrayAdapter.notifyDataSetChanged();
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                progressBar.setVisibility(View.GONE);
 
 
                 Log.v(TAG, response.body().toString());

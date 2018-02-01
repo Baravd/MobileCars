@@ -14,5 +14,11 @@
             android:id="@+id/customerCarList"
             android:layout_width="match_parent"
             android:layout_height="383dp" />
+
+        <ProgressBar
+            android:id="@+id/customerProgressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

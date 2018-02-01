@@ -10,12 +10,15 @@ import com.bvd.android.carstobert.R;
 import com.bvd.android.carstobert.controllers.CarController;
 import com.bvd.android.carstobert.customer.CustomerAllCarsActivity;
 import com.bvd.android.carstobert.model.Car;
-import com.bvd.android.carstobert.model.dtos.CarIdDto;
+import com.google.gson.Gson;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.WebSocket;
+import okhttp3.WebSocketListener;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -33,6 +36,7 @@ public class AddCarActivity extends AppCompatActivity {
     EditText statusText;
     @BindView(R.id.addTypeText)
     EditText typeText;
+    private OkHttpClient okHttpClient;
 
 
     @Override
@@ -78,9 +82,10 @@ public class AddCarActivity extends AppCompatActivity {
                 if (response.code() == 200) {
 
                     Toast.makeText(AddCarActivity.this, "Succesful add", Toast.LENGTH_SHORT).show();
+                } else {
+                    Log.v(TAG, "not added");
                 }
-                Log.v(TAG, "not added");
-                finish();
+
 
             }
 
@@ -92,6 +97,56 @@ public class AddCarActivity extends AppCompatActivity {
             }
         });
 
-        finish();
+        startWebSocketListener();
+
+        //finish();
+    }
+
+    //web scoket listener
+    private final class MyWebSocketListener extends WebSocketListener {
+        @Override
+        public void onOpen(WebSocket webSocket, okhttp3.Response response) {
+            super.onOpen(webSocket, response);
+        }
+
+        @Override
+        public void onMessage(WebSocket webSocket, String text) {
+            output(text);
+        }
+
+        @Override
+        public void onFailure(WebSocket webSocket, Throwable t, okhttp3.Response response) {
+            output("Error");
+        }
+    }
+
+    private void output(final String text) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Log.v(TAG, "Message from server=" + text);
+                Gson gson = new Gson();
+                Car car = gson.fromJson(text, Car.class);
+                Log.v(TAG, "Object from server=" + car);
+                finish();
+
+            }
+
+        });
+    }
+
+    private void startWebSocketListener() {
+        okHttpClient = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(CustomerAllCarsActivity.API_BASE_URL)
+                .build();
+        MyWebSocketListener listener = new MyWebSocketListener();
+        WebSocket webSocket = okHttpClient.newWebSocket(request, listener);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        okHttpClient.dispatcher().executorService().shutdown();
     }
 }
